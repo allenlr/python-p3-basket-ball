@@ -1,3 +1,5 @@
+from lib.basket_ball import *
+
 def game_dict():
     return {
         "home": {
@@ -182,3 +184,52 @@ def game_dict():
             ]
         }
     }
+
+def get_all_players():
+    return game_dict()['home']['players'] + game_dict()['away']['players']
+
+def get_both_teams():
+    return game_dict()['home'] + game_dict()['away']
+
+def num_points_per_game(name):
+    return next((player['points_per_game'] for player in get_all_players() if player['name'] == name), None)
+
+def player_age(name):
+    return next((player['age'] for player in get_all_players() if player['name'] == name), None)
+
+def team_colors(team_name):
+    return next((game_dict()[f'{team}']['colors'] for team in game_dict() if game_dict()[f'{team}']['team_name'] == team_name), None)
+
+def team_names():
+    return [game_dict()[f'{team}']['team_name'] for team in game_dict()]
+
+def home_team():
+    return [players for players in game_dict()['home']['players']]
+
+def away_team():
+    return [players for players in game_dict()['away']['players']]
+
+def player_numbers(team):
+    away_numbers = []
+    home_numbers = []
+    if team == "Washington Wizards":
+        away_numbers.append([player['number'] for player in away_team()])
+        return away_numbers[0]
+    else:
+        home_numbers.append([player['number'] for player in home_team()])
+        return home_numbers[0]
+
+def player_stats(player_name):
+    return next((player for player in get_all_players() if player['name'] == player_name))
+
+def average_rebounds_by_shoe_brand():
+    players = get_all_players()
+    rebounds_by_shoe_brand = {}
+    for player in players:
+        shoe_brand = player['shoe_brand']
+        rebounds = player['rebounds_per_game']
+        rebounds_by_shoe_brand.setdefault(shoe_brand, []).append(rebounds)
+    for brand, rebounds in rebounds_by_shoe_brand.items():
+        print(f"{brand}:  {sum(rebounds) / len(rebounds):.2f}")
+
+    
